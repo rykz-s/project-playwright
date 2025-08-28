@@ -6,7 +6,6 @@ import { faker } from "@faker-js/faker";
 When('I type a first name', async () => {
     const firstName_field = pageFixture.page.getByRole('textbox', { name: 'First Name' });
     await firstName_field.fill("Ryu");
-    // await pageFixture.page.pause();
 });
 
 
@@ -38,7 +37,6 @@ Then('I should be presented with a succesful contact us submission message', asy
     const text = await pageFixture.page.innerText('#contact_reply h1');
     const expectedText = "Thank You for your Message!";
     // use playwright's "Expect" function to assert the text of the h1 element
-    // await pageFixture.page.pause();
     expect(text).toBe(expectedText);
 });
 
@@ -51,7 +49,8 @@ Then('I should be presented with a unsuccesful contact message', async () => {
 
     // Extract the text from body element
     const bodyText = await bodyElement.textContent();
-    await expect(bodyText).toMatch(/Error: (all fields are required|Invalid email address)/);
+    expect(bodyText).toMatch(/Error: (all fields are required|Invalid email address)/);
+    await pageFixture.page.pause();
 });
 
 // Cucumber Exppresion:
@@ -76,7 +75,6 @@ When('I enter a specific email address {string}', async (emailAddress: string) =
 When('I type a specific text {string} and a number {int} within the comment input field', async (word: string, number: number) => {
     await pageFixture.page.getByRole('textbox', { name: 'Comments' })
         .fill(word + " " + number);
-    // await pageFixture.page.pause();
 });
 
 // Random Data using Faker.js
@@ -99,5 +97,44 @@ When('I enter a random email address', async () => {
     const randomEmail = faker.internet.email();
     await pageFixture.page.getByRole('textbox', { name: 'Email Address' })
         .fill(randomEmail);
-    await pageFixture.page.pause();
+});
+
+// Scenario outlines
+When('I type a first name {word} and a last name {word}', async (firstName: string, lastName: string) => {
+    await pageFixture.page.getByRole('textbox', { name: 'First Name' })
+        .fill(firstName);
+    await pageFixture.page.getByRole('textbox', { name: 'Last Name' })
+        .fill(lastName);
+
+});
+
+When('I enter an email address {string} and a comment {string}', async (email: string, comment: string) => {
+    await pageFixture.page.getByRole('textbox', { name: 'Email Address' })
+        .fill(email);
+    await pageFixture.page.getByRole('textbox', { name: 'Comments' })
+        .fill(comment);
+});
+
+Then('i should be presented with header text {string}', async (message: string) => {
+    // wait for the target element
+    await pageFixture.page.waitForSelector("//h1 | //body", {state: "visible"});
+
+    // get all elements
+    const elements = await pageFixture.page.locator("//h1 | //body").elementHandles();
+    let foundElementText = '';
+
+    // loop through each of the elements
+    for (let element of elements) {
+        // get the inner text of the element
+        let text = await element.innerText();
+
+        // if statement to check whether text includes expected text
+        if(text.includes(message)) {
+            foundElementText = text;
+            break;
+        }
+    }
+    // perform an assertion
+    expect(foundElementText).toContain(message);
+    
 });
