@@ -1,4 +1,4 @@
-import { AfterAll, Given, When, Then } from "@cucumber/cucumber";
+import { When, Then } from "@cucumber/cucumber";
 import { pageFixture } from "./hooks/browserContextFixture";
 import { expect } from '@playwright/test';
 import { faker } from "@faker-js/faker";
@@ -50,15 +50,13 @@ Then('I should be presented with a unsuccesful contact message', async () => {
     // Extract the text from body element
     const bodyText = await bodyElement.textContent();
     expect(bodyText).toMatch(/Error: (all fields are required|Invalid email address)/);
-    await pageFixture.page.pause();
+    
 });
 
-// Cucumber Exppresion:
-
+// Cucumber Expression:
 When('I type a specific first name {string}', async (firstName: string) => {
     await pageFixture.page.getByRole('textbox', { name: 'First Name' })
         .fill(firstName);
-
 });
 
 When('I type a specific last name {string}', async (lastName: string) => {
@@ -105,7 +103,6 @@ When('I type a first name {word} and a last name {word}', async (firstName: stri
         .fill(firstName);
     await pageFixture.page.getByRole('textbox', { name: 'Last Name' })
         .fill(lastName);
-
 });
 
 When('I enter an email address {string} and a comment {string}', async (email: string, comment: string) => {
@@ -136,5 +133,4 @@ Then('i should be presented with header text {string}', async (message: string) 
     }
     // perform an assertion
     expect(foundElementText).toContain(message);
-    
 });

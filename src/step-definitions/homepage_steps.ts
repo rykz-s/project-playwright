@@ -14,18 +14,12 @@ When('I click on the contact us button', async () => {
     await contactUs_button.click();
 });
 
-When('I switch to the new browser tab', async () => {
-    await pageFixture.context.waitForEvent("page"); //reinitialise the page > new tab > page
-    
-    //Retrieve all current open pages (tabs)
-    const allPages = await pageFixture.context.pages();
-
-    //Assign the most recent tab to pageFixture.page
-    pageFixture.page = allPages[allPages.length - 1];
-
-    //Bring th enewly assigned tab to the front (Make it active)
-    await pageFixture.page.bringToFront();
-
-    //Ensure the newly assigned tab is also fully maximized
-    await pageFixture.page.setViewportSize({ width: 1920, height: 1080 });
+When('I click on the login portal button', async () => {
+    // await page.pause();
+    const loginPortal_button = await pageFixture.page.getByRole('link', { name: 'LOGIN PORTAL Login Portal' });
+    await loginPortal_button.click();
 });
+
+Given('I wait for {int} seconds', async (seconds: number) => {
+    await pageFixture.page.waitForTimeout(seconds * 1000);
+})
