@@ -1,3 +1,4 @@
+@regression @login
 Feature: WebdriverUniversity.com - Login Page
     # Background: Pre conditions
     #     Given I navigate to the webdriveruniversity homepage
@@ -15,5 +16,9 @@ Feature: WebdriverUniversity.com - Login Page
             | username  | password     | expectedAlertText    |
             | webdriver | webdriver123 | validation succeeded |
             | webdriver | Password123  | validation failed    |
+        @smoke @ignore
+        Examples:
+            | username  | password     | expectedAlertText    |
+            | webdriver | webdriver123 | validation succeeded |
 
 
